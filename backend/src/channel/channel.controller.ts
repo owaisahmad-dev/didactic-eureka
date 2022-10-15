@@ -13,7 +13,6 @@ import { UpdateChannelNameDto } from "./dto/update_channel_name.dto";
 import { UpdateChannelQuestionsQueueDto } from "./dto/update_channel_questions_queue";
 import { UpdateChannelTime } from "./dto/update_channel_time";
 import * as express from "express";
-import { paymentService } from "../payment/payment.service";
 import { authMiddleware } from "../middlewares/auth";
 
 const channelController = Router();
@@ -37,10 +36,6 @@ channelController.post(
     }
     const tenantId = channel.tenantId;
     const updatedTenant = await tenantService.findTenantById(tenantId);
-
-    if (updatedTenant.is_paid_plan) {
-      await paymentService.updateStripeSubscription(updatedTenant);
-    }
 
     // join the channel in slack
     await SlackService.joinChannel(
@@ -223,8 +218,6 @@ channelController.delete("/", async (req: Request, res: Response) => {
   );
 
   const tenant = await tenantService.findTenantById(channel.tenantId);
-  if (tenant.is_paid_plan)
-    await paymentService.updateStripeSubscription(tenant);
 
   return res.status(200).send({ message: "Channel deleted" });
 });

@@ -1,5 +1,4 @@
 import { DataSource } from "typeorm";
-import { BillingHistory } from "./billing_history/billing_history.entity";
 import { Category } from "./category/category.entity";
 import { Channel } from "./channel/channel.entity";
 import { Question } from "./question/question.entity";
@@ -12,13 +11,8 @@ const pgDataSource: DataSource = new DataSource({
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [Tenant, Category, Channel, Question, BillingHistory],
+  entities: [Tenant, Category, Channel, Question],
   synchronize: true,
-  extra: {
-    ssl: {
-      rejectUnauthorized: false,
-    },
-  },
 });
 
 export { pgDataSource };

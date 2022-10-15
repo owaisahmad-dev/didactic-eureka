@@ -9,10 +9,7 @@ import channelController, {
   channelService,
 } from "./channel/channel.controller";
 import questionController from "./question/question.controller";
-import { paymentController } from "./payment/payment.controller";
-import { authMiddleware } from "./middlewares/auth";
 import { Tenant } from "./tenant/tenant.entity";
-import { TypedRequestBody } from "../types";
 import { ADMIN_PASSWORD, ADMIN_USERNAME } from "./utils";
 import * as jwt from "jsonwebtoken";
 import * as morgan from "morgan";
@@ -49,7 +46,6 @@ app.use("/tenant", tenantController);
 app.use("/category", categoryController);
 app.use("/channel", channelController);
 app.use("/question", questionController);
-app.use("/payment", paymentController);
 
 app.post(
   "/admin/login",

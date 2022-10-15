@@ -22,7 +22,7 @@ const Home: NextPage = () => {
             Slack to get started!
           </Text>
           <Link
-            href="https://slack.com/oauth/v2/authorize?client_id=2964626451557.3874596300898&scope=channels:join,chat:write,im:history,channels:history,channels:manage,channels:read,groups:read,im:write,users:read.email,users:read&user_scope=identity.basic"
+            href={`https://slack.com/oauth/v2/authorize?client_id=${process.env.NEXT_PUBLIC_CLIENT_ID}&scope=channels:join,chat:write,im:history,channels:history,channels:manage,channels:read,groups:read,im:write,users:read.email,users:read&user_scope=identity.basic`}
             passHref
           >
             <a>
@@ -43,7 +43,7 @@ const Home: NextPage = () => {
           <Link
             href={`https://slack.com/openid/connect/authorize?scope=openid&amp;response_type=code&amp;redirect_uri=${encodeURIComponent(
               process.env.NEXT_PUBLIC_SLACK_REDIRECT_URI_LOGIN as string
-            )}&amp;client_id=2964626451557.3874596300898`}
+            )}&amp;client_id=${process.env.NEXT_PUBLIC_CLIENT_ID}`}
             passHref
           >
             <a>

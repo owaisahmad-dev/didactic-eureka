@@ -1,9 +1,12 @@
 import { App } from "@slack/bolt";
+import { Message } from "@slack/web-api/dist/response/ConversationsRepliesResponse";
+
+console.log(process.env.BOT_TOKEN, process.env.SIGNING_SECRET)
 
 const app = new App({
   token: process.env.BOT_TOKEN,
-  signingSecret: process.env.SIGNING_SECRET,
-});
+  signingSecret: process.env.SIGNING_SECRET
+})
 
 export const SlackService = {
   getUserEmail: async (user_id: string, access_token: string) => {
@@ -42,6 +45,35 @@ export const SlackService = {
       token: access_token,
     });
 
-    return res.ok;
+    return {ok:res.ok, ts: res.ts};
   },
+
+  getThread: async (
+    channel_id: string,
+    ts: string,
+    access_token: string
+  ) => {
+    const res = await app.client.conversations.replies({
+      token: access_token,
+      channel: channel_id,
+      ts
+    })
+
+    let originalMessage: Message;
+    let replies: Message[] = [];
+
+    res.messages.forEach(msg => {
+      if (msg.ts == ts){
+        originalMessage = msg;
+      }
+      else {
+        replies.push(msg);
+      }
+    })
+
+    return {
+      originalMessage,
+      replies
+    }
+  }
 };

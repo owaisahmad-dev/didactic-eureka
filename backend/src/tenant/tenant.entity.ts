@@ -9,8 +9,6 @@ import {
   UpdateDateColumn,
   UsingJoinColumnIsNotAllowedError,
 } from "typeorm";
-import { BillingHistory } from "../billing_history/billing_history.entity";
-import { Category } from "../category/category.entity";
 import { Channel } from "../channel/channel.entity";
 import { Question } from "../question/question.entity";
 
@@ -39,21 +37,6 @@ export class Tenant {
   @Column()
   is_enterprise: boolean;
 
-  @Column({
-    default: false,
-  })
-  is_paid_plan: boolean;
-
-  @OneToMany(
-    (type) => BillingHistory,
-    (billingHistory) => billingHistory.tenant,
-    {
-      lazy: true,
-      cascade: true,
-    }
-  )
-  billingHistory: Promise<BillingHistory[]>;
-
   @OneToMany((type) => Channel, (channel) => channel.tenant, {
     lazy: true,
     cascade: true,
@@ -76,30 +59,8 @@ export class Tenant {
   @Column({
     default: true,
   })
-  is_trial: boolean;
-
-  @Column()
-  trial_end_date: Date;
-
-  @Column({
-    default: true,
-  })
   is_enabled: boolean;
 
-  @Column({
-    nullable: true,
-  })
-  subscription_type: string;
-
-  @Column({
-    nullable: true,
-  })
-  stripe_customer_id: string;
-
-  @Column({
-    nullable: true,
-  })
-  stripe_subscription_id: string;
 
   @CreateDateColumn()
   createdAt: Date;

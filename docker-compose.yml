@@ -2,7 +2,7 @@ version: "3.7"
 services:
   postgres:
     image: postgres:latest
-    container_name: guftbot-postgres
+    container_name: bot-postgres
     restart: always
     environment:
       - POSTGRES_USER=postgres

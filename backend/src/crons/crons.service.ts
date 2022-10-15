@@ -2,6 +2,7 @@ import { CronJob } from "cron";
 import { channelService } from "../channel/channel.controller";
 import { Channel } from "../channel/channel.entity";
 import { SlackService } from "../slack/slack.service";
+import { create_groups_dto } from "../utils/create_groups_dto";
 
 type Jobs = {
   [key: string]: CronJob;
@@ -51,7 +52,7 @@ export class CronsService {
     const questionsQueue = channel.questionsQueue;
     const question = questionsQueue.shift();
     if (!question) {
-      SlackService.sendMessage(
+      await SlackService.sendMessage(
         channel.slack_id,
         "I don't have any more questions for you today",
         (await channel.tenant).access_token
@@ -59,11 +60,18 @@ export class CronsService {
       return;
     }
 
-    SlackService.sendMessage(
+    const {ts} = await SlackService.sendMessage(
       channel.slack_id,
       question.text,
       (await channel.tenant).access_token
     );
+
+    setTimeout(async () => {
+      const {originalMessage, replies} = await SlackService.getThread(channel.slack_id, ts, (await channel.tenant).access_token);
+      const dto = create_groups_dto(originalMessage, replies);
+      // TODO send this DTO to ML API
+    }, 1000 * 60);
+    return;
 
     await channelService.refreshQueue(channelId);
   }

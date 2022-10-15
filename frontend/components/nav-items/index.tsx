@@ -18,7 +18,6 @@ export const NavItems = () => {
     <Box>
       <UnorderedList styleType={"none"} m={0} p={0}>
         <ListItem color={"white"} display={"inline-block"} p={2}>
-          <Link href="/billing">Billing</Link>
         </ListItem>
         <ListItem color={"white"} display={"inline-block"} p={2}>
           <Link href="/help">Help</Link>

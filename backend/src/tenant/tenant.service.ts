@@ -42,7 +42,6 @@ export class TenantService {
     let tenant = this.tenantRepository.create({
       ...createTenantDto,
       email,
-      trial_end_date: date.toISOString(),
     });
 
     let isSuccess = true;
@@ -86,17 +85,6 @@ export class TenantService {
     });
 
     return tenant;
-  }
-
-  async removeSubscription(id: string) {
-    const tenant = await this.findTenantById(id);
-    this.tenantRepository.update(id, {
-      subscription_type: "",
-      stripe_subscription_id: "",
-      is_paid_plan: false,
-      is_trial:
-        new Date().getTime() < new Date(tenant.trial_end_date).getTime(),
-    });
   }
 
   async findByWorkspaceId(workspaceId: string) {
