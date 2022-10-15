@@ -1,0 +1,32 @@
+version: "3.7"
+services:
+  postgres:
+    image: postgres:latest
+    container_name: guftbot-postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=guftbot
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend/
+    container_name: bot-backend
+    ports:
+    - "8080:8080"
+    depends_on:
+    - "postgres"
+
+  frontend:
+    build: ./frontend/
+    container_name: bot-frontend
+    ports:
+    - "3000:3000"
+    depends_on:
+    - "backend"
+
+
